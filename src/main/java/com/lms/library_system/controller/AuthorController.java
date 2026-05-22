@@ -44,5 +44,11 @@ public class AuthorController {
 	public ResponseEntity<Author> updateAuthorUsingPatch(@PathVariable Long id, @RequestBody Author author){
 		return ResponseEntity.ok(authorService.partialUpdate(id, author));
 	}
+	
+	@DeleteMapping("delete/{id}")
+	public ResponseEntity<String> deleteById(@PathVariable Long id) {
+		String output = authorService.deleteById(id);
+		return ResponseEntity.ok(output);
+	}
 
 }

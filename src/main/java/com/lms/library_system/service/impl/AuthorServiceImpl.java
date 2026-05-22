@@ -43,14 +43,24 @@ public class AuthorServiceImpl implements AuthorService {
 
 	@Override
 	public Author partialUpdate(Long id, Author incomingFields) {
-	Author existingData = authorRepo.findById(id).orElseThrow();
-	if(incomingFields.getName() != null) {
-		existingData.setName(incomingFields.getName());
-	}
-	if(incomingFields.getMail() != null) {
-		existingData.setMail(incomingFields.getMail());
-	}
-    return authorRepo.save(existingData);
+		Author existingData = authorRepo.findById(id).orElseThrow();
+		if (incomingFields.getName() != null) {
+			existingData.setName(incomingFields.getName());
+		}
+		if (incomingFields.getMail() != null) {
+			existingData.setMail(incomingFields.getMail());
+		}
+		return authorRepo.save(existingData);
 	}
 
+	@Override
+	public String deleteById(Long id) {
+		Optional<Author> author = authorRepo.findById(id);
+		if (author.isPresent()) {
+			authorRepo.deleteById(id);
+			return "Author " + id + " : Deleted Succesfully";
+		} else {
+			return "Id does not exist";
+		}
+	}
 }

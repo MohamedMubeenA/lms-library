@@ -15,4 +15,6 @@ public interface AuthorService {
 	Author updateAuthor(Long id, Author author);
 	
 	Author partialUpdate(Long id, Author author);
+	
+	String deleteById(Long id);
 }
