@@ -2,15 +2,9 @@ package com.lms.library_system.controller;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.lms.library_system.entity.Author;
 import com.lms.library_system.service.AuthorService;
@@ -38,6 +32,17 @@ public class AuthorController {
 	public ResponseEntity<Optional<Author>> getAuthorById(@PathVariable Long id){
 		Optional<Author> authorById = authorService.getAuthorById(id);
 		return ResponseEntity.ok(authorById);
+	}
+	
+	@PutMapping("/updateAuthor/{id}")
+	public ResponseEntity<Author> updateAuthorById(@PathVariable Long id, @RequestBody Author author){
+		Author updatedAuthor = authorService.updateAuthor(id, author);
+		return ResponseEntity.ok(updatedAuthor);
+	}
+	
+	@PatchMapping("/patchUpdate/{id}")
+	public ResponseEntity<Author> updateAuthorUsingPatch(@PathVariable Long id, @RequestBody Author author){
+		return ResponseEntity.ok(authorService.partialUpdate(id, author));
 	}
 
 }
