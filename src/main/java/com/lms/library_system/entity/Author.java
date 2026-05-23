@@ -1,9 +1,7 @@
 package com.lms.library_system.entity;
 
 import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -17,13 +15,13 @@ public class Author {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@NotBlank
+	@NotBlank(message = "Name Should not be empty")
 	private String name;
-	@Email
+	@Email(message = "Invalid Mail format")
 	private String mail;
-	
+
 	@JsonManagedReference
-	@OneToMany(mappedBy="author")
+	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Book> books;
 
 	public Long getId() {

@@ -3,14 +3,15 @@ package com.lms.library_system.controller;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import com.lms.library_system.dto.AuthorBookRequest;
 import com.lms.library_system.entity.Author;
 import com.lms.library_system.response.ApiResponse;
 import com.lms.library_system.service.AuthorService;
-
 import jakarta.validation.Valid;
 
 @RestController
@@ -39,9 +40,9 @@ public class AuthorController {
 		apiResponse.setData(allAuthors);
 		return ResponseEntity.ok(apiResponse);
 	}
-	
+
 	@GetMapping("/getAuthorById/{id}")
-	public ResponseEntity<ApiResponse> getAuthorById(@PathVariable Long id){
+	public ResponseEntity<ApiResponse> getAuthorById(@PathVariable Long id) {
 		ApiResponse apiResponse = new ApiResponse();
 		Optional<Author> authorById = authorService.getAuthorById(id);
 		apiResponse.setMessage("Author Data Received Successfully");
@@ -49,9 +50,9 @@ public class AuthorController {
 		apiResponse.setData(authorById);
 		return ResponseEntity.ok(apiResponse);
 	}
-	
+
 	@PutMapping("/updateAuthor/{id}")
-	public ResponseEntity<ApiResponse> updateAuthorById(@PathVariable Long id, @RequestBody Author author){
+	public ResponseEntity<ApiResponse> updateAuthorById(@PathVariable Long id, @RequestBody Author author) {
 		ApiResponse apiResponse = new ApiResponse();
 		Author updatedAuthor = authorService.updateAuthor(id, author);
 		apiResponse.setMessage("Author Data Received Successfully");
@@ -59,10 +60,9 @@ public class AuthorController {
 		apiResponse.setData(updatedAuthor);
 		return ResponseEntity.ok(apiResponse);
 	}
-	
-	
+
 	@PatchMapping("/patchUpdate/{id}")
-	public ResponseEntity<ApiResponse> updateAuthorUsingPatch(@PathVariable Long id, @RequestBody Author author){
+	public ResponseEntity<ApiResponse> updateAuthorUsingPatch(@PathVariable Long id, @RequestBody Author author) {
 		ApiResponse apiResponse = new ApiResponse();
 		Author patchUpdate = authorService.partialUpdate(id, author);
 		apiResponse.setMessage("Author Data Updated Successfully");
@@ -70,7 +70,7 @@ public class AuthorController {
 		apiResponse.setData(patchUpdate);
 		return ResponseEntity.ok(apiResponse);
 	}
-	
+
 	@DeleteMapping("delete/{id}")
 	public ResponseEntity<ApiResponse> deleteById(@PathVariable Long id) {
 		ApiResponse apiResponse = new ApiResponse();
@@ -81,12 +81,23 @@ public class AuthorController {
 	}
 
 	@PostMapping("/saveAuthorWithBooks")
-	public ResponseEntity<ApiResponse> saveAuthorWithBooks(@Valid @RequestBody AuthorBookRequest authorBookReq){
+	public ResponseEntity<ApiResponse> saveAuthorWithBooks(@Valid @RequestBody AuthorBookRequest authorBookReq) {
 		ApiResponse apiResponse = new ApiResponse();
 		Author savedAuthor = authorService.saveAuthorWithBooks(authorBookReq);
 		apiResponse.setMessage("Author with Books Data Created Successfully");
 		apiResponse.setStatus(201);
 		apiResponse.setData(savedAuthor);
+		return ResponseEntity.ok(apiResponse);
+	}
+
+	@GetMapping("/getAuthorWithPages")
+	public ResponseEntity<ApiResponse> getDatawithPagination(@RequestParam int page, @RequestParam int size) {
+		ApiResponse apiResponse = new ApiResponse();
+		Pageable pageable = PageRequest.of(page, size);
+		Page<Author> authorWithPages = authorService.getAllAuthor(pageable);
+		apiResponse.setMessage("Data Retrieved with Pages Successfully");
+		apiResponse.setStatus(200);
+		apiResponse.setData(authorWithPages);
 		return ResponseEntity.ok(apiResponse);
 	}
 }

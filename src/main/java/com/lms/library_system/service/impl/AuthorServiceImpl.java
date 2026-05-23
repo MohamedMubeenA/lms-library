@@ -2,17 +2,16 @@ package com.lms.library_system.service.impl;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import com.lms.library_system.dto.AuthorBookRequest;
 import com.lms.library_system.entity.Author;
 import com.lms.library_system.entity.Book;
 import com.lms.library_system.repository.AuthorRepository;
 import com.lms.library_system.repository.BookRepository;
 import com.lms.library_system.service.AuthorService;
-
 import jakarta.transaction.Transactional;
 
 @Service
@@ -85,5 +84,10 @@ public class AuthorServiceImpl implements AuthorService {
 			bookRepo.save(book);
 		}    
 	    return savedAuthor;
+	}
+
+	@Override
+	public Page<Author> getAllAuthor(Pageable pageable) {
+		return authorRepo.findAll(pageable);
 	}
 }

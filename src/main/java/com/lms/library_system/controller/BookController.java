@@ -1,11 +1,9 @@
 package com.lms.library_system.controller;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import com.lms.library_system.entity.Book;
 import com.lms.library_system.response.ApiResponse;
 import com.lms.library_system.service.BookService;
@@ -35,6 +33,4 @@ public class BookController {
 		apiResponse.setData(allBooks);
 		return ResponseEntity.ok(apiResponse);
 	}
-	
-	
 }
