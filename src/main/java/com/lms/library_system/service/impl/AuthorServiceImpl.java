@@ -6,15 +6,22 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lms.library_system.dto.AuthorBookRequest;
 import com.lms.library_system.entity.Author;
+import com.lms.library_system.entity.Book;
 import com.lms.library_system.repository.AuthorRepository;
+import com.lms.library_system.repository.BookRepository;
 import com.lms.library_system.service.AuthorService;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
 	@Autowired
 	private AuthorRepository authorRepo;
+	@Autowired
+	private BookRepository bookRepo;
 
 	@Override
 	public Author saveAuthor(Author author) {
@@ -62,5 +69,21 @@ public class AuthorServiceImpl implements AuthorService {
 		} else {
 			return "Id does not exist";
 		}
+	}
+
+	@Transactional
+	@Override
+	public Author saveAuthorWithBooks(AuthorBookRequest authorBookReq) {
+		Author author = new Author();
+		author.setName(authorBookReq.getName());
+		author.setMail(authorBookReq.getMail());
+		Author savedAuthor = authorRepo.save(author); //Like author_id generation, after save
+		List<Book> dtoBooks = authorBookReq.getBooks();
+		for(Book book : dtoBooks) {
+			book.setAuthor(savedAuthor);
+			savedAuthor.setBooks(dtoBooks);
+			bookRepo.save(book);
+		}    
+	    return savedAuthor;
 	}
 }
