@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.lms.library_system.entity.Book;
+import com.lms.library_system.response.ApiResponse;
 import com.lms.library_system.service.BookService;
 
 @RestController
@@ -16,15 +17,23 @@ public class BookController {
 	private BookService bookService;
 
 	@PostMapping("/addBooks")
-	public ResponseEntity<Book> addBook(@RequestBody Book book) {
+	public ResponseEntity<ApiResponse> addBook(@RequestBody Book book) {
+		ApiResponse apiResponse = new ApiResponse();
 		Book savedBooks = bookService.saveBook(book);
-		return ResponseEntity.ok(savedBooks);
+		apiResponse.setMessage("Book Added Successfully");
+		apiResponse.setStatus(201);
+		apiResponse.setData(savedBooks);
+		return ResponseEntity.ok(apiResponse);
 	}
 
 	@GetMapping("/getBooks")
-	public ResponseEntity<List<Book>> getAllBooks() {
+	public ResponseEntity<ApiResponse> getAllBooks() {
+		ApiResponse apiResponse = new ApiResponse();
 		List<Book> allBooks = bookService.getAllBooks();
-		return ResponseEntity.ok(allBooks);
+		apiResponse.setMessage("Book Added Successfully");
+		apiResponse.setStatus(201);
+		apiResponse.setData(allBooks);
+		return ResponseEntity.ok(apiResponse);
 	}
 	
 	
