@@ -2,6 +2,8 @@ package com.lms.library_system.service.impl;
 
 import java.util.List;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,15 +23,19 @@ public class AuthorServiceImpl implements AuthorService {
 	private AuthorRepository authorRepo;
 	@Autowired
 	private BookRepository bookRepo;
+	
+	private static final Logger logger = LoggerFactory.getLogger(AuthorServiceImpl.class);
 
 	@Override
 	public Author saveAuthor(Author author) {
 		System.out.println("Name:" + author.getName());
+		logger.info("author data saved");
 		return authorRepo.save(author);
 	}
 
 	@Override
 	public List<Author> getAllAuthors() {
+		logger.info("getting all authors");
 		return authorRepo.findAll();
 
 	}
@@ -64,8 +70,10 @@ public class AuthorServiceImpl implements AuthorService {
 		Optional<Author> author = authorRepo.findById(id);
 		if (author.isPresent()) {
 			authorRepo.deleteById(id);
+			logger.info("author data deleted");
 			return "Author " + id + " : Deleted Succesfully";
 		} else {
+			logger.warn("author id does not exist");
 			return "Id does not exist";
 		}
 	}
